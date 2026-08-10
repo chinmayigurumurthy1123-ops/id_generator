@@ -175,7 +175,7 @@ function CreateCard() {
   const generatedClass = getBuilderClass(selectedStacks);
 
   try {
-    const response = await fetch("http://localhost:5000/api/cards", {
+    const response = await fetch("https://id-generator-sfys.onrender.com/api/share", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

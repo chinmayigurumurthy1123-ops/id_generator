@@ -185,7 +185,7 @@ async function handleShareOnX() {
     // ==========================================
 
     const shareResponse = await fetch(
-      "http://localhost:5000/api/share",
+      "https://id-generator-sfys.onrender.com/api/share",
       {
         method: "POST",
 
