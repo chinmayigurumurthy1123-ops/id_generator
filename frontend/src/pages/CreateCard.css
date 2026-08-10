@@ -1,0 +1,592 @@
+/* ================================
+   PAGE BACKGROUND
+================================ */
+
+.create-page {
+  min-height: 100vh;
+  width: 100%;
+
+  background: #056b3a;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  padding: 70px 20px;
+
+  box-sizing: border-box;
+}
+
+
+/* ================================
+   MAIN WHITE CARD
+================================ */
+
+.create-card-container {
+  width: 100%;
+  max-width: 900px;
+
+  background: white;
+
+  border-radius: 28px;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+
+/* ================================
+   TITLE
+================================ */
+
+.create-card-container h1 {
+  margin: 0;
+
+  padding: 38px 30px 25px;
+
+  text-align: center;
+
+  color: #056b3a;
+
+  font-family: "Barriecito", cursive;
+
+  font-size: 58px;
+
+  font-weight: 400;
+}
+
+
+/* ================================
+   FORM SECTIONS
+================================ */
+
+.form-section {
+  padding: 18px 50px;
+
+  box-sizing: border-box;
+}
+
+
+/* ================================
+   LABELS
+================================ */
+
+.section-label {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color: #056b3a;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 20px;
+
+  font-weight: 700;
+}
+
+
+/* ================================
+   TEXT INPUTS
+================================ */
+
+.form-section > input[type="text"] {
+  width: 100%;
+
+  height: 54px;
+
+  padding: 0 18px;
+
+  box-sizing: border-box;
+
+  border: 2px solid #056b3a;
+
+  border-radius: 12px;
+
+  background: white;
+
+  color: #222;
+
+  font-size: 17px;
+
+  outline: none;
+}
+
+.form-section > input[type="text"]:focus {
+  border-color: #056b3a;
+}
+
+
+/* ================================
+   PHOTO UPLOAD
+================================ */
+
+.upload-box {
+  width: 100%;
+
+  height: 140px;
+
+  box-sizing: border-box;
+
+  border: 2px dashed #056b3a;
+
+  border-radius: 14px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  cursor: pointer;
+
+  color: #056b3a;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 18px;
+}
+
+.upload-box:hover {
+  background: #f5fff9;
+}
+
+.upload-box input[type="file"] {
+  display: none;
+}
+
+
+/* ================================
+   STACK CHIPS
+================================ */
+
+.stack-chips {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 12px;
+}
+
+
+.stack-chip {
+  padding: 10px 20px;
+
+  border: 2px solid #056b3a;
+
+  border-radius: 25px;
+
+  background: white;
+
+  color: #056b3a;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 16px;
+
+  cursor: pointer;
+}
+
+.stack-chip:hover {
+  background: #eaf8ef;
+}
+
+
+.stack-chip.selected {
+  background: #056b3a;
+
+  color: white;
+}
+
+
+/* ================================
+   CUSTOM STACK
+================================ */
+
+.custom-stack {
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 15px;
+}
+
+.custom-stack input {
+  flex: 1;
+
+  height: 48px;
+
+  padding: 0 15px;
+
+  box-sizing: border-box;
+
+  border: 2px solid #056b3a;
+
+  border-radius: 10px;
+
+  font-size: 16px;
+
+  outline: none;
+}
+
+.custom-stack button {
+  padding: 0 22px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #056b3a;
+
+  color: white;
+
+  font-size: 16px;
+
+  cursor: pointer;
+}
+
+.custom-stack button:hover {
+  background: #045a31;
+}
+
+
+/* ================================
+   GENERATE SECTION
+================================ */
+
+.generate-section {
+  display: flex;
+
+  justify-content: center;
+
+  padding: 30px 50px 45px;
+}
+
+
+/* ================================
+   GENERATE BUTTON
+================================ */
+
+.generate-card-button {
+  padding: 14px 32px;
+
+  border: none;
+
+  border-radius: 30px;
+
+  background: #056b3a;
+
+  color: white;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 18px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.generate-card-button:hover {
+  background: #045a31;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 700px) {
+
+  .create-page {
+    padding: 30px 12px;
+  }
+
+  .create-card-container h1 {
+    font-size: 42px;
+
+    padding: 28px 20px 20px;
+  }
+
+  .form-section {
+    padding: 15px 25px;
+  }
+
+  .generate-section {
+    padding: 25px 25px 35px;
+  }
+}
+/* ==================================================
+   SELECTED PHOTO
+================================================== */
+
+.photo-selected-content {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  text-align: center;
+}
+
+.change-photo-text {
+  font-size: 14px;
+
+  color: #777;
+}
+
+
+/* ==================================================
+   CROP MODAL OVERLAY
+================================================== */
+
+.crop-modal-overlay {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background: rgba(0, 0, 0, 0.75);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  z-index: 9999;
+}
+
+
+/* ==================================================
+   CROP MODAL
+================================================== */
+
+.crop-modal {
+  width: 100%;
+
+  max-width: 700px;
+
+  background: white;
+
+  border-radius: 22px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+
+/* ==================================================
+   CROP HEADER
+================================================== */
+
+.crop-modal-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 18px 24px;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+.crop-modal-header h2 {
+  margin: 0;
+
+  color: #056b3a;
+
+  font-family: "Barriecito", cursive;
+
+  font-size: 30px;
+
+  font-weight: 400;
+}
+
+.crop-close-button {
+  width: 38px;
+
+  height: 38px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #f1f1f1;
+
+  color: #333;
+
+  font-size: 28px;
+
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.crop-close-button:hover {
+  background: #e5e5e5;
+}
+
+
+/* ==================================================
+   CROP AREA
+================================================== */
+
+.crop-container {
+  position: relative;
+
+  width: 100%;
+
+  height: 450px;
+
+  background: #222;
+}
+
+
+/* ==================================================
+   CROP CONTROLS
+================================================== */
+
+.crop-controls {
+  padding: 20px 25px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+.crop-control {
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+}
+
+.crop-control label {
+  width: 75px;
+
+  flex-shrink: 0;
+
+  color: #056b3a;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 16px;
+
+  font-weight: 700;
+}
+
+.crop-control input[type="range"] {
+  flex: 1;
+
+  accent-color: #056b3a;
+
+  cursor: pointer;
+}
+
+
+/* ==================================================
+   CROP BUTTONS
+================================================== */
+
+.crop-modal-buttons {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 12px;
+
+  padding: 0 25px 25px;
+}
+
+.crop-cancel-button,
+.crop-apply-button {
+  padding: 12px 24px;
+
+  border-radius: 25px;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.crop-cancel-button {
+  border: 2px solid #056b3a;
+
+  background: white;
+
+  color: #056b3a;
+}
+
+.crop-cancel-button:hover {
+  background: #f1faf5;
+}
+
+.crop-apply-button {
+  border: 2px solid #056b3a;
+
+  background: #056b3a;
+
+  color: white;
+}
+
+.crop-apply-button:hover {
+  background: #045a31;
+}
+
+
+/* ==================================================
+   MOBILE CROP MODAL
+================================================== */
+
+@media (max-width: 700px) {
+
+  .crop-modal {
+    max-width: 100%;
+  }
+
+  .crop-container {
+    height: 350px;
+  }
+
+  .crop-modal-header {
+    padding: 15px 18px;
+  }
+
+  .crop-modal-header h2 {
+    font-size: 25px;
+  }
+
+  .crop-controls {
+    padding: 18px;
+  }
+
+  .crop-modal-buttons {
+    padding: 0 18px 20px;
+  }
+
+}
