@@ -233,15 +233,13 @@ function CardPage() {
       // 5. Create X share URL
       // ==========================================
 
-      const shareText =
-        "Check out my ID card! 🚀 #FrameInGoa";
+    const shareText =
+  `Check out my ID card! 🚀 #FrameInGoa\n${shareURL}`;
 
-      const xShareURL =
-        `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-          shareText
-        )}&url=${encodeURIComponent(
-          shareURL
-        )}`;
+const xShareURL =
+  `https://twitter.com/intent/post?text=${encodeURIComponent(
+    shareText
+  )}`;
 
       // ==========================================
       // 6. Navigate popup to X
