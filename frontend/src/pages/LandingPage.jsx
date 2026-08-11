@@ -8,11 +8,18 @@ function LandingPage() {
     <main className="landing-page">
       <div className="hero">
 
-        <img
-          src="/landing-bg.png"
-          alt="Hacker House Goa"
-          className="hero-image"
-        />
+        <picture>
+          <source
+            media="(max-width: 600px)"
+            srcSet="/landing-mobile.png"
+          />
+
+          <img
+            src="/landing-bg.png"
+            alt="Hacker House Goa"
+            className="hero-image"
+          />
+        </picture>
 
         <div className="hero-content">
 

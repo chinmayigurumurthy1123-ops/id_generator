@@ -1,6 +1,6 @@
 /* =========================================
    WHOLE WEBSITE
-   ========================================= */
+========================================= */
 
 .landing-page {
   width: 100%;
@@ -15,7 +15,7 @@
 
 /* =========================================
    CANVA ARTWORK
-   ========================================= */
+========================================= */
 
 .hero {
   position: relative;
@@ -23,16 +23,20 @@
   width: 100%;
 
   /*
-    IMPORTANT:
-    We do NOT use cover.
-    We do NOT use contain.
-    
-    The image simply keeps its original
-    16:9 proportions.
+  IMPORTANT:
+  We do NOT use cover.
+  We do NOT use contain.
+
+  The image simply keeps its original
+  proportions.
   */
+
   line-height: 0;
 }
 
+.hero picture {
+  display: block;
+}
 
 .hero-image {
   display: block;
@@ -41,7 +45,7 @@
   height: auto;
 
   /*
-    NEVER crop the Canva artwork.
+  NEVER crop the Canva artwork.
   */
   object-fit: contain;
 }
@@ -49,15 +53,16 @@
 
 /* =========================================
    CONTENT OVER THE CANVA ARTWORK
-   ========================================= */
+========================================= */
 
 .hero-content {
   position: absolute;
 
   /*
-    The content is positioned relative
-    to the 16:9 Canva image.
+  The content is positioned relative
+  to the Canva image.
   */
+
   left: 0;
   right: 0;
 
@@ -72,8 +77,8 @@
   align-items: center;
 
   /*
-    We'll position the actual elements
-    with absolute positioning.
+  We'll position the actual elements
+  with absolute positioning.
   */
 
   pointer-events: none;
@@ -82,15 +87,16 @@
 
 /* =========================================
    "GENERATE YOUR ID CARD"
-   ========================================= */
+========================================= */
 
 .hero-content h1 {
   position: absolute;
 
   /*
-    Position relative to your Canva design.
-    Adjust these percentages if needed.
+  Position relative to your Canva design.
+  Adjust these percentages if needed.
   */
+
   top: 42%;
 
   left: 50%;
@@ -107,8 +113,9 @@
   font-weight: 400;
 
   /*
-    Scales with the artwork.
+  Scales with the artwork.
   */
+
   font-size: clamp(38px, 5.2vw, 78px);
 
   line-height: 1.05;
@@ -123,7 +130,7 @@
 
 /* =========================================
    GENERATE BUTTON
-   ========================================= */
+========================================= */
 
 .generate-button {
   position: absolute;
@@ -159,8 +166,9 @@
   pointer-events: auto;
 
   /*
-    Very subtle depth.
+  Very subtle depth.
   */
+
   box-shadow: 0 6px 0 rgba(0, 0, 0, 0.08);
 
   transition:
@@ -171,7 +179,7 @@
 
 /* =========================================
    BUTTON HOVER
-   ========================================= */
+========================================= */
 
 .generate-button:hover {
   transform: translateX(-50%) translateY(-3px);
@@ -183,7 +191,7 @@
 
 /* =========================================
    BUTTON CLICK
-   ========================================= */
+========================================= */
 
 .generate-button:active {
   transform: translateX(-50%) translateY(1px);
@@ -195,7 +203,7 @@
 
 /* =========================================
    MOBILE
-   ========================================= */
+========================================= */
 
 @media (max-width: 600px) {
 
@@ -209,6 +217,7 @@
     width: 90%;
   }
 
+
   .generate-button {
     top: 56%;
 
@@ -220,4 +229,5 @@
 
     font-size: 6vw;
   }
+
 }
