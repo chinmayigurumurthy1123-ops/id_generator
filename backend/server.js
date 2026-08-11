@@ -64,7 +64,6 @@ app.post("/api/cards", async (req, res) => {
       message: "Card saved successfully!",
       cardId: result.insertedId,
     });
-
   } catch (error) {
     console.error("Error saving card:", error);
 
@@ -98,17 +97,23 @@ app.post("/api/share", async (req, res) => {
       createdAt: new Date(),
     });
 
-    // This will eventually be your deployed backend URL
+    // Use deployed backend URL
+    const backendURL =
+      process.env.BACKEND_URL ||
+      "https://id-generator-sfys.onrender.com";
+
     const shareURL =
-      `${process.env.BACKEND_URL || `http://localhost:${PORT}`}/share/${shareId}`;
+      `${backendURL}/share/${shareId}`;
 
     res.json({
       shareId,
       shareURL,
     });
-
   } catch (error) {
-    console.error("Error creating share link:", error);
+    console.error(
+      "Error creating share link:",
+      error
+    );
 
     res.status(500).json({
       message: "Could not create share link",
@@ -130,16 +135,34 @@ app.get("/share/:id", async (req, res) => {
 
     if (!share) {
       return res.status(404).send(`
-        <h1>Card not found</h1>
-        <p>This card link is invalid or expired.</p>
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Card not found</title>
+          </head>
+          <body>
+            <h1>Card not found</h1>
+            <p>This card link is invalid or expired.</p>
+          </body>
+        </html>
       `);
     }
 
     const imageURL = share.imageURL;
 
+    // Deployed backend URL
+    const backendURL =
+      process.env.BACKEND_URL ||
+      "https://id-generator-sfys.onrender.com";
+
+    const shareURL =
+      `${backendURL}/share/${shareId}`;
+
     // ==========================================
     // HTML PAGE WITH SOCIAL PREVIEW METADATA
     // ==========================================
+
+    res.set("Cache-Control", "no-store");
 
     res.send(`
       <!DOCTYPE html>
@@ -157,7 +180,9 @@ app.get("/share/:id", async (req, res) => {
           content="Check out my HH Goa 2026 ID card!"
         />
 
-        <!-- Open Graph -->
+        <!-- ================================
+             OPEN GRAPH
+        ================================= -->
 
         <meta
           property="og:title"
@@ -175,16 +200,28 @@ app.get("/share/:id", async (req, res) => {
         />
 
         <meta
+          property="og:image:secure_url"
+          content="${imageURL}"
+        />
+
+        <meta
+          property="og:image:type"
+          content="image/png"
+        />
+
+        <meta
           property="og:type"
           content="website"
         />
 
         <meta
           property="og:url"
-          content="${process.env.BACKEND_URL || `http://localhost:${PORT}`}/share/${shareId}"
+          content="${shareURL}"
         />
 
-        <!-- Twitter / X -->
+        <!-- ================================
+             TWITTER / X
+        ================================= -->
 
         <meta
           name="twitter:card"
@@ -206,6 +243,11 @@ app.get("/share/:id", async (req, res) => {
           content="${imageURL}"
         />
 
+        <meta
+          name="twitter:image:alt"
+          content="HH Goa 2026 ID Card"
+        />
+
       </head>
 
       <body>
@@ -224,7 +266,10 @@ app.get("/share/:id", async (req, res) => {
     `);
 
   } catch (error) {
-    console.error("Error loading share page:", error);
+    console.error(
+      "Error loading share page:",
+      error
+    );
 
     res.status(500).send(
       "Could not load shared card."
