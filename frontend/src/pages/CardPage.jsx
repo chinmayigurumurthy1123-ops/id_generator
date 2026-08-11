@@ -16,8 +16,8 @@ function CardPage() {
   // Reference to the actual canvas
   const canvasRef = useRef(null);
 
-  const [isSharing, setIsSharing] = useState(false);
-const [uploadedImageURL, setUploadedImageURL] = useState(null);
+  const [isSharing, setIsSharing] =
+    useState(false);
 
   const {
     photo,
@@ -33,11 +33,12 @@ const [uploadedImageURL, setUploadedImageURL] = useState(null);
 
   if (!location.state) {
     return (
-      <main>
-        <div>
+      <main className="card-page">
+        <div className="card-page-container">
           <h1>No Card Data Found</h1>
 
           <button
+            type="button"
             onClick={() => navigate("/create")}
           >
             Create Card
@@ -85,177 +86,193 @@ const [uploadedImageURL, setUploadedImageURL] = useState(null);
   // SHARE ON X
   // ==================================================
 
-async function handleShareOnX() {
-  const canvas = canvasRef.current;
+  async function handleShareOnX() {
+    const canvas = canvasRef.current;
 
-  if (!canvas) {
-    alert("Card image is not ready yet.");
-    return;
-  }
+    if (!canvas) {
+      alert(
+        "Card image is not ready yet."
+      );
+      return;
+    }
 
-  // Open X window immediately
-  const xWindow = window.open(
-    "about:blank",
-    "_blank",
-    "width=600,height=600"
-  );
-
-  if (!xWindow) {
-    alert(
-      "Your browser blocked the X window. Please allow pop-ups for this site."
+    // Open immediately from the button click
+    // so the browser does not block the popup.
+    const xWindow = window.open(
+      "about:blank",
+      "_blank",
+      "width=600,height=600"
     );
-    return;
-  }
 
-  try {
-    setIsSharing(true);
+    if (!xWindow) {
+      alert(
+        "Your browser blocked the X window. Please allow pop-ups for this site."
+      );
+      return;
+    }
 
-    // ==========================================
-    // 1. CONVERT CANVAS TO PNG
-    // ==========================================
+    try {
+      setIsSharing(true);
 
-    const imageBlob = await new Promise(
-      (resolve, reject) => {
-        canvas.toBlob(
-          (blob) => {
-            if (blob) {
-              resolve(blob);
-            } else {
-              reject(
-                new Error("Could not create image")
-              );
-            }
-          },
-          "image/png"
+      // ==========================================
+      // 1. Convert canvas to PNG
+      // ==========================================
+
+      const imageBlob =
+        await new Promise(
+          (resolve, reject) => {
+            canvas.toBlob(
+              (blob) => {
+                if (blob) {
+                  resolve(blob);
+                } else {
+                  reject(
+                    new Error(
+                      "Could not create image"
+                    )
+                  );
+                }
+              },
+              "image/png"
+            );
+          }
+        );
+
+      // ==========================================
+      // 2. Prepare Cloudinary upload
+      // ==========================================
+
+      const formData =
+        new FormData();
+
+      formData.append(
+        "file",
+        imageBlob,
+        "id-card.png"
+      );
+
+      formData.append(
+        "upload_preset",
+        "hh_id_card"
+      );
+
+      // ==========================================
+      // 3. Upload generated CARD to Cloudinary
+      // ==========================================
+
+      const cloudinaryResponse =
+        await fetch(
+          "https://api.cloudinary.com/v1_1/amsybsli/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+      if (!cloudinaryResponse.ok) {
+        throw new Error(
+          "Cloudinary upload failed"
         );
       }
-    );
 
-    // ==========================================
-    // 2. UPLOAD IMAGE TO CLOUDINARY
-    // ==========================================
+      const cloudinaryData =
+        await cloudinaryResponse.json();
 
-    const formData = new FormData();
+      const imageURL =
+        cloudinaryData.secure_url;
 
-    formData.append(
-      "file",
-      imageBlob,
-      "id-card.png"
-    );
-
-    formData.append(
-      "upload_preset",
-      "hh_id_card"
-    );
-
-    const cloudinaryResponse =
-      await fetch(
-        "https://api.cloudinary.com/v1_1/amsybsli/image/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-    if (!cloudinaryResponse.ok) {
-      throw new Error(
-        "Cloudinary upload failed"
-      );
-    }
-
-    const cloudinaryData =
-      await cloudinaryResponse.json();
-
-    const imageURL =
-      cloudinaryData.secure_url;
-
-    if (!imageURL) {
-      throw new Error(
-        "Cloudinary did not return an image URL"
-      );
-    }
-
-    console.log(
-      "Cloudinary image:",
-      imageURL
-    );
-
-    // ==========================================
-    // 3. SEND IMAGE URL TO OUR BACKEND
-    // ==========================================
-
-    const shareResponse = await fetch(
-      "https://id-generator-sfys.onrender.com/api/share",
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          imageURL: imageURL,
-        }),
+      if (!imageURL) {
+        throw new Error(
+          "Cloudinary did not return an image URL"
+        );
       }
-    );
 
-    if (!shareResponse.ok) {
-      throw new Error(
-        "Could not create share link"
+      console.log(
+        "Uploaded image:",
+        imageURL
       );
+
+      // ==========================================
+      // 4. Create share link in backend
+      // ==========================================
+
+      const shareResponse =
+        await fetch(
+          "https://id-generator-sfys.onrender.com/api/share",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+            body: JSON.stringify({
+              imageURL,
+            }),
+          }
+        );
+
+      const shareData =
+        await shareResponse.json();
+
+      if (!shareResponse.ok) {
+        throw new Error(
+          shareData.message ||
+            "Could not create share link"
+        );
+      }
+
+      const shareURL =
+        shareData.shareURL;
+
+      console.log(
+        "Share URL:",
+        shareURL
+      );
+
+      // ==========================================
+      // 5. Create X share URL
+      // ==========================================
+
+      const shareText =
+        "Check out my ID card! 🚀 #FrameInGoa";
+
+      const xShareURL =
+        `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+          shareText
+        )}&url=${encodeURIComponent(
+          shareURL
+        )}`;
+
+      // ==========================================
+      // 6. Navigate popup to X
+      // ==========================================
+
+      xWindow.location.href =
+        xShareURL;
+
+    } catch (error) {
+      console.error(
+        "Error sharing card:",
+        error
+      );
+
+      xWindow.close();
+
+      alert(
+        "Could not prepare your card for sharing. Please try again."
+      );
+    } finally {
+      setIsSharing(false);
     }
-
-    const shareData =
-      await shareResponse.json();
-
-    console.log(
-      "Share URL:",
-      shareData.shareURL
-    );
-
-    // ==========================================
-    // 4. CREATE X SHARE URL
-    // ==========================================
-
-    const shareText =
-      "Check out my ID card! 🚀 #FrameInGoa";
-
-    const xShareURL =
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-        shareText
-      )}&url=${encodeURIComponent(
-        shareData.shareURL
-      )}`;
-
-    // ==========================================
-    // 5. OPEN X
-    // ==========================================
-
-    xWindow.location.href = xShareURL;
-
-  } catch (error) {
-    console.error(
-      "Error sharing card:",
-      error
-    );
-
-    xWindow.close();
-
-    alert(
-      "Could not prepare your card for sharing. Please try again."
-    );
-
-  } finally {
-    setIsSharing(false);
   }
-}
 
   // ==================================================
   // PAGE
   // ==================================================
 
   return (
-    <main>
+    <main className="card-page">
+
       <div className="card-page-container">
 
         <h1 className="card-page-title">
@@ -271,10 +288,16 @@ async function handleShareOnX() {
           <CardCanvas
             photo={photo}
             name={name}
-            selectedStacks={selectedStacks}
+            selectedStacks={
+              selectedStacks
+            }
             xHandle={xHandle}
-            builderClass={builderClass}
-            externalCanvasRef={canvasRef}
+            builderClass={
+              builderClass
+            }
+            externalCanvasRef={
+              canvasRef
+            }
           />
 
         </div>
@@ -296,14 +319,18 @@ async function handleShareOnX() {
 
           <button
             type="button"
-            onClick={handleDownload}
+            onClick={
+              handleDownload
+            }
           >
             Download
           </button>
 
           <button
             type="button"
-            onClick={handleShareOnX}
+            onClick={
+              handleShareOnX
+            }
             disabled={isSharing}
           >
             {isSharing
@@ -314,6 +341,7 @@ async function handleShareOnX() {
         </div>
 
       </div>
+
     </main>
   );
 }

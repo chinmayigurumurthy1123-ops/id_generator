@@ -26,7 +26,6 @@ function CreateCard() {
   });
 
   const [zoom, setZoom] = useState(1);
-
   const [rotation, setRotation] = useState(0);
 
   const [croppedAreaPixels, setCroppedAreaPixels] =
@@ -84,9 +83,7 @@ function CreateCard() {
     });
 
     setZoom(1);
-
     setRotation(0);
-
     setShowCropper(true);
 
     // Allows selecting the same file again later
@@ -172,45 +169,63 @@ function CreateCard() {
   // ================================
 
   async function handleGenerate() {
-  const generatedClass = getBuilderClass(selectedStacks);
+    const generatedClass =
+      getBuilderClass(selectedStacks);
 
-  try {
-    const response = await fetch("https://id-generator-sfys.onrender.com/api/share", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        xHandle,
-        selectedStacks,
-        builderClass: generatedClass,
-      }),
-    });
+    try {
+      // IMPORTANT:
+      // Generate Card saves the card data.
+      // It does NOT create the share link.
+      // The share link is created later from CardPage
+      // after the actual card canvas has been generated.
+      const response = await fetch(
+        "https://id-generator-sfys.onrender.com/api/cards",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            xHandle,
+            selectedStacks,
+            builderClass: generatedClass,
+          }),
+        }
+      );
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(data.message || "Failed to save card");
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Failed to save card"
+        );
+      }
+
+      console.log(
+        "Card saved to MongoDB:",
+        data
+      );
+
+      // Go to the actual card page.
+      navigate("/card", {
+        state: {
+          photo,
+          name,
+          selectedStacks,
+          xHandle,
+          builderClass: generatedClass,
+          cardId: data.cardId,
+        },
+      });
+    } catch (error) {
+      console.error("Error saving card:", error);
+
+      alert(
+        "Could not save your card. Please try again."
+      );
     }
-
-    console.log("Card saved to MongoDB:", data);
-
-    navigate("/card", {
-      state: {
-        photo,
-        name,
-        selectedStacks,
-        xHandle,
-        builderClass: generatedClass,
-        cardId: data.cardId,
-      },
-    });
-  } catch (error) {
-    console.error("Error saving card:", error);
-    alert("Could not save your card. Please try again.");
   }
-}
 
   return (
     <div className="create-page">
@@ -380,46 +395,30 @@ function CreateCard() {
               </button>
             </div>
 
-            {/* ================================
-                CROP AREA
-            ================================ */}
+            {/* CROP AREA */}
 
             <div className="crop-container">
-
               <Cropper
                 image={cropperImage.url}
                 crop={crop}
                 zoom={zoom}
                 rotation={rotation}
-
                 aspect={444 / 413}
-
                 onCropChange={setCrop}
-
                 onZoomChange={setZoom}
-
                 onRotationChange={setRotation}
-
                 onCropComplete={
                   handleCropComplete
                 }
-
                 cropShape="rect"
-
                 showGrid={true}
-
                 objectFit="contain"
               />
-
             </div>
 
-            {/* ================================
-                CONTROLS
-            ================================ */}
+            {/* CONTROLS */}
 
             <div className="crop-controls">
-
-              {/* ZOOM */}
 
               <div className="crop-control">
                 <label>
@@ -439,8 +438,6 @@ function CreateCard() {
                   }
                 />
               </div>
-
-              {/* ROTATION */}
 
               <div className="crop-control">
                 <label>
@@ -463,9 +460,7 @@ function CreateCard() {
 
             </div>
 
-            {/* ================================
-                BUTTONS
-            ================================ */}
+            {/* BUTTONS */}
 
             <div className="crop-modal-buttons">
 
@@ -495,7 +490,6 @@ function CreateCard() {
   );
 }
 
-
 // ==================================================
 // CREATE CROPPED IMAGE
 // ==================================================
@@ -508,18 +502,19 @@ function getCroppedImage(
   originalName
 ) {
   return new Promise((resolve, reject) => {
-
     const image = new Image();
 
     image.onload = () => {
-
-      const canvas = document.createElement("canvas");
+      const canvas =
+        document.createElement("canvas");
 
       const ctx = canvas.getContext("2d");
 
       if (!ctx) {
         reject(
-          new Error("Could not create canvas context")
+          new Error(
+            "Could not create canvas context"
+          )
         );
         return;
       }
@@ -527,7 +522,6 @@ function getCroppedImage(
       const radians =
         (rotation * Math.PI) / 180;
 
-      // Calculate rotated bounding box
       const sin = Math.abs(
         Math.sin(radians)
       );
@@ -592,7 +586,6 @@ function getCroppedImage(
 
       canvas.toBlob(
         (blob) => {
-
           if (!blob) {
             reject(
               new Error(

@@ -61,12 +61,10 @@
 ========================================= */
 
 .card-preview {
-  width: 100%;
-
   display: flex;
   justify-content: center;
-
-  overflow: hidden;
+  align-items: center;
+  width: 100%;
 }
 
 .card-preview canvas {
